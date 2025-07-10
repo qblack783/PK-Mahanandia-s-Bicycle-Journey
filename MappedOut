@@ -1,0 +1,70 @@
+import folium
+
+# Create the map centered on Europe/Asia area
+m = folium.Map(location=[40, 20], zoom_start=3, tiles='CartoDB Positron')
+
+# Journey stops with coordinates, description, and image
+stops = [
+    {
+        'name': 'New Delhi, India',
+        'location': [28.6139, 77.2090],
+        'description': 'Starting point: PK began his epic bicycle journey in 1977 to reunite with his love.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/India_Gate_in_New_Delhi_03-2016.jpg/320px-India_Gate_in_New_Delhi_03-2016.jpg'
+    },
+    {
+        'name': 'Tehran, Iran',
+        'location': [35.6892, 51.3890],
+        'description': 'Passed through Tehran, crossing Iran as part of his route to Europe.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Tehran_Tower_Milad.jpg/320px-Tehran_Tower_Milad.jpg'
+    },
+    {
+        'name': 'Ankara, Turkey',
+        'location': [39.9208, 32.8541],
+        'description': 'Cycled through Turkey, braving the terrain and weather.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Ankara_view.jpg/320px-Ankara_view.jpg'
+    },
+    {
+        'name': 'Sofia, Bulgaria',
+        'location': [42.6977, 23.3219],
+        'description': 'Entered Eastern Europe via Bulgaria, continuing northwest.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Sofia_Panorama.jpg/320px-Sofia_Panorama.jpg'
+    },
+    {
+        'name': 'Frankfurt, Germany',
+        'location': [50.1109, 8.6821],
+        'description': 'Traveled through Germany on his way to Scandinavia.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Frankfurt_Skyline_2019.jpg/320px-Frankfurt_Skyline_2019.jpg'
+    },
+    {
+        'name': 'Borås, Sweden',
+        'location': [57.7210, 12.9401],
+        'description': 'Final destination: Borås, Sweden — where PK reunited with his love and built a life.',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bor%C3%A5s_City_Hall.jpg/320px-Bor%C3%A5s_City_Hall.jpg'
+    }
+]
+
+# Add markers with popups
+for stop in stops:
+    html_popup = f"""
+    <h4>{stop['name']}</h4>
+    <p>{stop['description']}</p>
+    <img src="{stop['image']}" width="200">
+    """
+    folium.Marker(
+        location=stop['location'],
+        popup=folium.Popup(html_popup, max_width=300),
+        icon=folium.Icon(color='blue' if stop['name'] != 'Borås, Sweden' else 'red')
+    ).add_to(m)
+
+# Draw the journey path
+route = [stop['location'] for stop in stops]
+folium.PolyLine(
+    route,
+    color="blue",
+    weight=4,
+    opacity=0.7
+).add_to(m)
+
+# Save to HTML
+m.save("pk_mahanandia_journey.html")
+print("Map saved! Open 'pk_mahanandia_journey.html' to view PK's journey.")
